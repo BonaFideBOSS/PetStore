@@ -3,7 +3,7 @@ var cacheFiles = [
   "index.html",
   // "scripts/product.js",
   // "scripts/vue.js",
-  // "manifest.json",
+  "manifest.json",
   // "scripts/app.js",
   // "images/logo.jpg",
   // "images/cat_food.jpg",
