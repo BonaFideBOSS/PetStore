@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pet Store</title>
+  <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
+
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      text-align: center;
+      margin: 1rem 0;
+    }
+
+    .products>div {
+      padding: 2rem 1rem;
+      border: 1px solid black;
+      border-radius: 3rem;
+      overflow: hidden;
+      max-width: 320px;
+    }
+
+    .products .img-container {
+      height: 250px;
+    }
+
+    .products img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .products .rating {
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+
+<body>
+  <main id="app">
+    <h1 v-text="sitename"></h1>
+    <button @click="showCheckout" :disabled="cart.length == 0">
+      Checkout ({{cart.length}})
+    </button>
+
+    <!-- Product Page -->
+    <div v-if="showProduct" class="products">
+      <div v-for="product in products">
+        <div class="img-container">
+          <img v-bind:src="product.image" />
+        </div>
+        <div>
+          <h2 v-text="product.title" style="display: inline-block"></h2>
+          <span v-if="product.inventory===cartCount(product.id)">All out!</span>
+          <span v-else-if="product.inventory - cartCount(product.id) < product.inventory">
+            Only {{product.inventory - cartCount(product.id)}} left!
+          </span>
+          <span v-else>Buy now!</span>
+        </div>
+        <div class="rating">
+          <span v-for="n in product.rating">★</span>
+          <span v-for="n in 5-product.rating">☆</span>
+        </div>
+        <p v-html="product.description"></p>
+        <p>Price: {{product.price}}</p>
+        <button @click="addToCart(product)" :disabled="!canAddToCart(product)">
+          Add to cart
+        </button>
+        <button @click="removeFromCart(product)" v-show="canRemoveFromCart(product)">
+          Remove from Cart
+        </button>
+      </div>
+    </div>
+
+    <!-- Checkout Page -->
+    <div v-else>
+      <h1>Checkout</h1>
+      <button @click="showCheckout" style="margin-bottom: 1rem">
+        Go back
+      </button>
+      <p>Items in cart: {{cart.length}}</p>
+
+      <form v-on:submit.prevent="submitOrder" style="margin-bottom: 1rem">
+        <p><b>First Name:</b> <input v-model.trim="order.firstName" /></p>
+        <p><b>Last Name:</b> <input v-model.trim="order.lastName" /></p>
+        <p><b>Address:</b> <input v-model="order.address" /></p>
+        <p><b>City:</b> <input v-model="order.city" /></p>
+        <p>
+          <b>State:</b>
+          <select v-model="order.state">
+            <option disabled value="">State</option>
+            <option v-for="(state, key) in states" v-bind:value="state">
+              {{state}}
+            </option>
+          </select>
+        </p>
+        <p>
+          <b>Zip/Postal Code:</b>
+          <input v-model.number="order.zip" type="number" />
+        </p>
+
+        <p>
+          <input type="checkbox" id="gift" value="true" v-model="order.gift" v-bind:true-value="order.sendGift"
+            v-bind:false-value="order.dontSendGift" />
+          <label for="gift">Ship As Gift?</label>
+        </p>
+        <p>
+          <input type="radio" id="home" value="Home" v-model="order.method" />
+          <label for="home">Home</label>
+          <input type="radio" id="business" value="Business" v-model="order.method" />
+          <label for="business">Business</label>
+        </p>
+
+        <button type="submit">Place Order</button>
+      </form>
+
+      <div style="background-color: lightblue; padding: 1rem">
+        <h3>Order Information</h3>
+        <p>First Name: {{order.firstName}}</p>
+        <p>Last Name: {{order.lastName}}</p>
+        <p>Address: {{order.address}}</p>
+        <p>City: {{order.city}}</p>
+        <p>State: {{order.state}}</p>
+        <p>Zip: {{order.zip}}</p>
+        <p>Gift? {{order.gift}}</p>
+        <p>Method: {{order.method}}</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="scripts/products.js"></script>
+  <script src="scripts/vue.js"></script>
+  <script src="scripts/app.js"></script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js");
+    }
+  </script>
+</body>
+
+</html>

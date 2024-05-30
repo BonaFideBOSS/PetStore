@@ -1,0 +1,16 @@
+{
+  "name": "Pet Store",
+  "short_name": "PetStore",
+  "description": "e-commerce to buy pet products",
+  "icons": [
+    {
+      "src": "images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "id": "index.html",
+  "start_url": "index.html",
+  "display": "fullscreen",
+  "background_color": "#000"
+}
