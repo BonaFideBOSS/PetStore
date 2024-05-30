@@ -5,9 +5,9 @@ var cacheFiles = [
   // "scripts/vue.js",
   "manifest.json",
   "scripts/app.js",
-  "images/logo.jpg",
-  "images/cat_food.jpg",
-  "images/yarn.jpg",
+  // "images/logo.jpg",
+  // "images/cat_food.jpg",
+  // "images/yarn.jpg",
 ];
 
 self.addEventListener("install", (e) => {
